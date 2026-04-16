@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Pesan Penting Buat Kamu! ❤️</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffeef8; /* Pink sangat muda */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Mencegah scroll saat tombol lari */
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        #gif-image {
+            max-width: 100%;
+            height: 200px; /* Atur tinggi seragam agar tidak loncat */
+            border-radius: 15px;
+            margin-bottom: 20px;
+            object-fit: contain; /* Menjaga rasio GIF */
+        }
+
+        h1 {
+            color: #d63384; /* Warna pink tua */
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            min-height: 1.2em; /* Biar teks ga loncat saat ganti */
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            position: relative; /* Penting untuk posisi absolut tombol 'No' nanti */
+            min-height: 50px; /* Biar container ga ngerucut */
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        #btn-yes {
+            background-color: #2ecc71; /* Hijau */
+            color: white;
+        }
+
+        #btn-yes:hover {
+            background-color: #27ae60;
+            transform: scale(1.1);
+        }
+
+        #btn-no {
+            background-color: #e74c3c; /* Merah */
+            color: white;
+            position: relative; /* Posisi awal normal */
+            z-index: 10; /* Biar selalu di atas container */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-container">
+    <img src="0.gif" alt="Lucu" id="gif-image">
+
+    <h1 id="question-text">Hai Sayang... Weekend ini kencan yuk? ❤️</h1>
+
+    <div class="btn-group">
+        <button id="btn-yes" onclick="accepted()">Mau!</button>
+        <button id="btn-no" onmouseover="moveButton()" onclick="rejected()">Enggak</button>
+    </div>
+</div>
+
+<script>
+    let rejectCount = 0;
+    const maxRejects = 6;
+
+    // GANTI LINK DI BAWAH INI DENGAN LINK GIF DARI GIPHY/TENOR
+    const firstGif = "https://media.giphy.com/media/v1.sh/0.gif"; // GIF Awal
+    const successGif = "https://media.giphy.com/media/v1.sh/success.gif"; // GIF Berhasil
+
+    const rejectGifs = [
+        "https://media.giphy.com/media/v1.sh/1.gif", // Link GIF Sedih 1
+        "https://media.giphy.com/media/v1.sh/2.gif", // Link GIF Sedih 2
+        "https://media.giphy.com/media/v1.sh/3.gif", 
+        "https://media.giphy.com/media/v1.sh/4.gif",
+        "https://media.giphy.com/media/v1.sh/5.gif",
+        "https://media.giphy.com/media/v1.sh/6.gif"
+    ];
+
+    const rejectQuestions = [
+        "Eh, serius? Gak mau kencan? 🥺",
+        "Pikir-pikir dulu deh... Yakin enggak? 😢",
+        "Kok tega banget sih menolak... 😭",
+        "Jahat banget... Sekali aja yuk? Pleaseee? 🙏",
+        "Beneran ga mau? Aku sedih lho... 💔",
+        "Oke fine, ini kesempatan terakhir. Mau kan? 😂"
+    ];
+
+    const btnNo = document.getElementById('btn-no');
+    const btnYes = document.getElementById('btn-yes');
+    const gifImage = document.getElementById('gif-image');
+    const questionText = document.getElementById('question-text');
+
+    // Set GIF awal saat web dibuka
+    gifImage.src = firstGif;
+
+    function rejected() {
+        if (rejectCount < maxRejects) {
+            questionText.innerHTML = rejectQuestions[rejectCount];
+            gifImage.src = rejectGifs[rejectCount]; // Mengganti sumber gambar ke URL luar
+            
+            // Perbesar tombol 'Ya'
+            let currentSize = parseFloat(window.getComputedStyle(btnYes).fontSize);
+            btnYes.style.fontSize = (currentSize + 5) + "px";
+            
+            rejectCount++;
+        } else {
+            moveButton(); 
+        }
+    }
+
+    function moveButton() {
+        if (rejectCount >= maxRejects) {
+            btnNo.style.position = 'absolute';
+            const container = document.getElementById('main-container');
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = btnNo.getBoundingClientRect();
+
+            const maxWidth = containerRect.width - btnRect.width - 40;
+            const maxHeight = containerRect.height - btnRect.height - 40;
+
+            const randomX = Math.floor(Math.random() * maxWidth) + 20;
+            const randomY = Math.floor(Math.random() * maxHeight) + 20;
+
+            btnNo.style.left = randomX + 'px';
+            btnNo.style.top = randomY + 'px';
+        }
+    }
+
+    function accepted() {
+        gifImage.src = successGif; // Mengganti ke GIF berhasil
+        questionText.innerHTML = "YAYYY! Gitu dong! ❤️<br>See you ya!";
+        document.querySelector('.btn-group').style.display = 'none';
+    }
+</script>
+</body>
+</html>
